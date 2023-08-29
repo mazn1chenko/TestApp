@@ -17,12 +17,13 @@ class MainViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: NewsCollectionViewCell.cellID)
-        
         return collectionView
         
     }()
     
     let titleLabel = UILabel()
+    
+    var allPostsArray: [Post]?
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,7 @@ class MainViewController: UIViewController {
         
         setupViews()
         setupLayouts()
+        networking()
 
     }
     
@@ -42,6 +44,7 @@ class MainViewController: UIViewController {
         newsCollectionView.delegate = self
         newsCollectionView.dataSource = self
         newsCollectionView.backgroundColor = Resourses.Colors.mainBackgroundColor
+
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = "For You"
@@ -75,26 +78,41 @@ class MainViewController: UIViewController {
         
         
     }
+    
+    func networking() {
+        
+        ApiManager.shared.getAllPosts { allPosts in
+                self.allPostsArray = allPosts.posts
+            
+            DispatchQueue.main.async {
+                self.newsCollectionView.reloadData()
 
-
+            }
+        }
+    }
 }
 
 //MARK: - UICollectionViewDelegate
 extension MainViewController: UICollectionViewDelegate {
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let vc = SpecificNews()
+        present(vc, animated: true)
+        
+    }
 }
 
 //MARK: - UICollectionViewDataSource
 extension MainViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { return 5 }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { return allPostsArray?.count ?? 0 }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.cellID, for: indexPath) as! NewsCollectionViewCell
-        cell.configureCell()
-        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.cellID, for: indexPath) as? NewsCollectionViewCell
+        cell?.configureCell(model: (allPostsArray?[indexPath.row])!)
+        return cell!
     }
     
 }
@@ -103,7 +121,9 @@ extension MainViewController: UICollectionViewDataSource {
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width / 1.05, height: view.frame.height / 6.5)
+        return CGSize(width: view.frame.width, height: view.frame.height / 4.5)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat { 2 }
 }
 

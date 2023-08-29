@@ -15,6 +15,9 @@
 		7122D4812A9E48AD008D57C7 /* NewsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7122D4802A9E48AD008D57C7 /* NewsCollectionViewCell.swift */; };
 		7122D4852A9E52CE008D57C7 /* Resourses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7122D4842A9E52CE008D57C7 /* Resourses.swift */; };
 		7122D48A2A9E546A008D57C7 /* ModelOfPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7122D4892A9E546A008D57C7 /* ModelOfPost.swift */; };
+		71D889132A9E5DF6003F9613 /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D889122A9E5DF6003F9613 /* ApiManager.swift */; };
+		71D889152A9E79DC003F9613 /* SpecificNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D889142A9E79DC003F9613 /* SpecificNews.swift */; };
+		71D889172A9E83CC003F9613 /* Extension Color .swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D889162A9E83CC003F9613 /* Extension Color .swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		7122D4802A9E48AD008D57C7 /* NewsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionViewCell.swift; sourceTree = "<group>"; };
 		7122D4842A9E52CE008D57C7 /* Resourses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resourses.swift; sourceTree = "<group>"; };
 		7122D4892A9E546A008D57C7 /* ModelOfPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelOfPost.swift; sourceTree = "<group>"; };
+		71D889122A9E5DF6003F9613 /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
+		71D889142A9E79DC003F9613 /* SpecificNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificNews.swift; sourceTree = "<group>"; };
+		71D889162A9E83CC003F9613 /* Extension Color .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension Color .swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +68,7 @@
 			children = (
 				7122D47F2A9E4340008D57C7 /* Application */,
 				7122D4872A9E5446008D57C7 /* Model */,
-				7122D4882A9E5454008D57C7 /* NetworkManager */,
+				7122D4882A9E5454008D57C7 /* ApiManager */,
 				7122D4862A9E52D2008D57C7 /* Resourses */,
 				7122D47E2A9E4328008D57C7 /* SupportingFiles */,
 				7122D4832A9E494D008D57C7 /* ViewControllers */,
@@ -94,6 +100,7 @@
 			children = (
 				7122D46E2A9E3E6C008D57C7 /* MainViewController.swift */,
 				7122D4802A9E48AD008D57C7 /* NewsCollectionViewCell.swift */,
+				71D889142A9E79DC003F9613 /* SpecificNews.swift */,
 			);
 			path = MainViewController;
 			sourceTree = "<group>";
@@ -110,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				7122D4842A9E52CE008D57C7 /* Resourses.swift */,
+				71D889162A9E83CC003F9613 /* Extension Color .swift */,
 			);
 			path = Resourses;
 			sourceTree = "<group>";
@@ -122,11 +130,12 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		7122D4882A9E5454008D57C7 /* NetworkManager */ = {
+		7122D4882A9E5454008D57C7 /* ApiManager */ = {
 			isa = PBXGroup;
 			children = (
+				71D889122A9E5DF6003F9613 /* ApiManager.swift */,
 			);
-			path = NetworkManager;
+			path = ApiManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,12 +208,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71D889152A9E79DC003F9613 /* SpecificNews.swift in Sources */,
 				7122D48A2A9E546A008D57C7 /* ModelOfPost.swift in Sources */,
 				7122D46F2A9E3E6C008D57C7 /* MainViewController.swift in Sources */,
 				7122D46B2A9E3E6C008D57C7 /* AppDelegate.swift in Sources */,
+				71D889132A9E5DF6003F9613 /* ApiManager.swift in Sources */,
 				7122D46D2A9E3E6C008D57C7 /* SceneDelegate.swift in Sources */,
 				7122D4852A9E52CE008D57C7 /* Resourses.swift in Sources */,
 				7122D4812A9E48AD008D57C7 /* NewsCollectionViewCell.swift in Sources */,
+				71D889172A9E83CC003F9613 /* Extension Color .swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ enum Resourses {
     
     enum Colors {
 
-        static let mainBackgroundColor = UIColor(red: 40, green: 47, blue: 57, alpha: 0)
+        static let mainBackgroundColor = UIColor(hex: "#282f39")
         
     }
     
