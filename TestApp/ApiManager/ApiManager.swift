@@ -67,10 +67,8 @@ class ApiManager {
     func getAllPosts(completion: @escaping (AllPost) -> Void) {
         
         let request = ApiType.getAllPost.request
-        print("\(request)")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let post = try? JSONDecoder().decode(AllPost.self, from: data){
-                print("HOW MANY POSTS DO YOU HAVEE SUKA /n\(post)")
                 completion(post)
                 
             } else {

@@ -14,7 +14,6 @@ class MainViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 5
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(NewsCollectionViewCell.self, forCellWithReuseIdentifier: NewsCollectionViewCell.cellID)
         return collectionView
@@ -24,6 +23,8 @@ class MainViewController: UIViewController {
     let titleLabel = UILabel()
     
     var allPostsArray: [Post]?
+    
+    var allSortedPostsArray: [Post]?
     
     let sortingButton = UIButton(type: .system)
         
@@ -51,19 +52,24 @@ class MainViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = "For You"
         titleLabel.textColor = .white
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 32)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         
-        
+        sortingButton.translatesAutoresizingMaskIntoConstraints = false
+        sortingButton.setImage(UIImage(named: "sortButton"), for: .normal)
+        sortingButton.tintColor = .white
+        sortingButton.addTarget(self, action: #selector(openAlertForSorting), for: .touchUpInside)
+
     }
     
     private func setupLayouts() {
         view.addSubview(titleLabel)
         view.addSubview(newsCollectionView)
+        view.addSubview(sortingButton)
         
         
         NSLayoutConstraint.activate([
             
-            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
 
             newsCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
@@ -71,13 +77,9 @@ class MainViewController: UIViewController {
             newsCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             newsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
+            sortingButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            sortingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
         ])
-        
-    }
-    
-    private func setupNavBar() {
-        
-        sortingButton.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
         
     }
     
@@ -91,6 +93,32 @@ class MainViewController: UIViewController {
 
             }
         }
+    }
+    
+    @objc func openAlertForSorting() {
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        let action1 = UIAlertAction(title: "Сортування за датою", style: .default) { [self] action in
+            allSortedPostsArray = allPostsArray?.sorted(by: { $0.timeshamp ?? 0 > $1.timeshamp ?? 0 })
+            allPostsArray = allSortedPostsArray
+            newsCollectionView.reloadData()
+
+
+        }
+        let action2 = UIAlertAction(title: "Сортування за рейтингом", style: .default) { [self] action in
+            allSortedPostsArray = allPostsArray?.sorted(by: { $0.likesCount ?? 0 > $1.likesCount ?? 0 })
+            allPostsArray = allSortedPostsArray
+            newsCollectionView.reloadData()
+
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+
+        alertController.addAction(action1)
+        alertController.addAction(action2)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true)
+        
     }
 }
 
@@ -115,6 +143,7 @@ extension MainViewController: UICollectionViewDelegate {
         navigationController?.pushViewController(vc, animated: true)
         
 }
+    
 }
 
 //MARK: - UICollectionViewDataSource
@@ -126,7 +155,17 @@ extension MainViewController: UICollectionViewDataSource {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionViewCell.cellID, for: indexPath) as? NewsCollectionViewCell
         cell?.configureCell(model: (allPostsArray?[indexPath.row])!)
+        cell?.collectionView = collectionView
+        cell?.indexPath = indexPath
+        cell?.delegate = self
+        cell?.tag = indexPath.row
         return cell!
+
+    }
+    
+    static func createcompos() -> UICollectionViewCompositionalLayout {
+        
+        
     }
     
 }
@@ -135,10 +174,18 @@ extension MainViewController: UICollectionViewDataSource {
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         return CGSize(width: view.frame.width, height: view.frame.height / 4.5)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat { 2 }
+}
+
+extension MainViewController: NewsCollectionViewCellDelegate {
+    func buttonTapped(at indexPath: IndexPath) {
+        print(indexPath)
+    }
 }
 
 

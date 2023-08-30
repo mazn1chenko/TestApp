@@ -9,6 +9,8 @@ import UIKit
 
 class NewsCollectionViewCell: UICollectionViewCell {
     
+    weak var delegate: NewsCollectionViewCellDelegate?
+
     static let cellID = "CellID"
     
     let imageOfPostLabel = UIImageView()
@@ -17,10 +19,16 @@ class NewsCollectionViewCell: UICollectionViewCell {
     let counterOfLikesOnPostLabel = UILabel()
     let timeShampOfPostLabel = UILabel()
     
+    let separator = UIView()
+    
     let expandCollapseButton = UIButton(type: .system)
     
-    var isExpanded = false
+    var isExpanded = true
     
+    var indexPath: IndexPath?
+    
+    weak var collectionView: UICollectionView?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -35,7 +43,10 @@ class NewsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
+    func setupViews() {
+        
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        separator.backgroundColor = .lightGray
         
         imageOfPostLabel.translatesAutoresizingMaskIntoConstraints = false
         imageOfPostLabel.image = UIImage(named: "TestingImage")
@@ -43,28 +54,27 @@ class NewsCollectionViewCell: UICollectionViewCell {
         titleOfPostLabel.translatesAutoresizingMaskIntoConstraints = false
         titleOfPostLabel.text = "TitleOfPost"
         titleOfPostLabel.textColor = .white
-        titleOfPostLabel.font = .boldSystemFont(ofSize: 20)
+        titleOfPostLabel.font = .boldSystemFont(ofSize: 18)
         titleOfPostLabel.numberOfLines = 3
         
         previewTextOfPostLabel.translatesAutoresizingMaskIntoConstraints = false
-        previewTextOfPostLabel.text = "previewTextOfPost"
         previewTextOfPostLabel.textColor = .white
-        previewTextOfPostLabel.font = .systemFont(ofSize: 18)
+        previewTextOfPostLabel.font = .systemFont(ofSize: 16)
         previewTextOfPostLabel.numberOfLines = 2
         
         counterOfLikesOnPostLabel.translatesAutoresizingMaskIntoConstraints = false
-        counterOfLikesOnPostLabel.text = "122 likes"
+        counterOfLikesOnPostLabel.text = "122 лайка"
         counterOfLikesOnPostLabel.textColor = .white
-        counterOfLikesOnPostLabel.font = .systemFont(ofSize: 14)
+        counterOfLikesOnPostLabel.font = .systemFont(ofSize: 12)
         
         timeShampOfPostLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeShampOfPostLabel.text = "4 hour ago"
+        timeShampOfPostLabel.text = "4 години тому"
         timeShampOfPostLabel.textColor = .white
-        timeShampOfPostLabel.font = .systemFont(ofSize: 14)
+        timeShampOfPostLabel.font = .systemFont(ofSize: 12)
         
         expandCollapseButton.translatesAutoresizingMaskIntoConstraints = false
-        expandCollapseButton.setTitle("Expand", for: .normal)
-        expandCollapseButton.isHidden = true
+        expandCollapseButton.setTitle("Розгорнути", for: .normal)
+        expandCollapseButton.isHidden = false
         expandCollapseButton.backgroundColor = .white
         expandCollapseButton.setTitleColor(.black, for: .normal)
         expandCollapseButton.layer.cornerRadius = 10
@@ -72,6 +82,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
+        addSubview(separator)
         addSubview(imageOfPostLabel)
         addSubview(titleOfPostLabel)
         addSubview(previewTextOfPostLabel)
@@ -80,28 +91,35 @@ class NewsCollectionViewCell: UICollectionViewCell {
         addSubview(expandCollapseButton)
         
         NSLayoutConstraint.activate([
+            
+            separator.bottomAnchor.constraint(equalTo: bottomAnchor),
+            separator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            separator.heightAnchor.constraint(equalToConstant: 1),
+            separator.widthAnchor.constraint(equalToConstant: frame.width - 40),
         
-            imageOfPostLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            imageOfPostLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            imageOfPostLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            imageOfPostLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             imageOfPostLabel.heightAnchor.constraint(equalToConstant: frame.height / 3),
             imageOfPostLabel.widthAnchor.constraint(equalToConstant: frame.height / 3),
             
-            titleOfPostLabel.leadingAnchor.constraint(equalTo: imageOfPostLabel.trailingAnchor, constant: 20),
-            titleOfPostLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            titleOfPostLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            titleOfPostLabel.leadingAnchor.constraint(equalTo: imageOfPostLabel.trailingAnchor, constant: 10),
+            titleOfPostLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            titleOfPostLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
             previewTextOfPostLabel.topAnchor.constraint(equalTo: titleOfPostLabel.bottomAnchor, constant: 5),
-            previewTextOfPostLabel.leadingAnchor.constraint(equalTo: imageOfPostLabel.trailingAnchor, constant: 20),
-            previewTextOfPostLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-                        
-            counterOfLikesOnPostLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            counterOfLikesOnPostLabel.leadingAnchor.constraint(equalTo: imageOfPostLabel.trailingAnchor, constant: 20),
+            previewTextOfPostLabel.leadingAnchor.constraint(equalTo: imageOfPostLabel.trailingAnchor, constant: 10),
+            previewTextOfPostLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
-            timeShampOfPostLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            counterOfLikesOnPostLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+            counterOfLikesOnPostLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            
+            timeShampOfPostLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             timeShampOfPostLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
-            expandCollapseButton.topAnchor.constraint(equalTo: previewTextOfPostLabel.bottomAnchor),
-            expandCollapseButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
+            expandCollapseButton.topAnchor.constraint(equalTo: previewTextOfPostLabel.bottomAnchor, constant: 10),
+            expandCollapseButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            expandCollapseButton.heightAnchor.constraint(equalToConstant: 25),
+            expandCollapseButton.widthAnchor.constraint(equalToConstant: 100)
 
         ])
         
@@ -109,22 +127,25 @@ class NewsCollectionViewCell: UICollectionViewCell {
     
     @objc func tapOnButton() {
         
-        print("Razvernis`")
-        
+        if isExpanded {
+            previewTextOfPostLabel.numberOfLines = 0
+            expandCollapseButton.setTitle("Згорнути", for: .normal)
+            isExpanded.toggle()
+            delegate?.buttonTapped(at: indexPath!)
+
+        }else{
+            previewTextOfPostLabel.numberOfLines = 2
+            expandCollapseButton.setTitle("Розгорнути", for: .normal)
+            isExpanded.toggle()
+
+        }
     }
     
     func configureCell(model: Post) {
         titleOfPostLabel.text = model.title
         previewTextOfPostLabel.text = model.previewText
         
-        let labelSize = previewTextOfPostLabel.sizeThatFits(CGSize(width: bounds.width - 20, height: CGFloat.greatestFiniteMagnitude))
-        
-        if labelSize.height > previewTextOfPostLabel.font.lineHeight * 2 {
-            expandCollapseButton.isHidden = false
-        } else {
-            expandCollapseButton.isHidden = true
-        }
-        counterOfLikesOnPostLabel.text = "\(model.likesCount ?? 0) likes"
+        counterOfLikesOnPostLabel.text = "\(model.likesCount ?? 0) лайків"
         
         let timestamp = model.timeshamp
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp ?? 0))
@@ -132,5 +153,37 @@ class NewsCollectionViewCell: UICollectionViewCell {
         dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         let formattedDate = dateFormatter.string(from: date)
         timeShampOfPostLabel.text = "\(formattedDate)"
+        
+        if previewTextOfPostLabel.isTruncated() {
+            expandCollapseButton.isHidden = false
+        }else {
+            expandCollapseButton.isHidden = true
+        }
+        expandCollapseButton.tag = model.postID ?? 00
+        //collectionView?.reloadData()
     }
 }
+
+extension UILabel {
+    func isTruncated() -> Bool {
+        guard let labelText = text else {
+            return false
+        }
+        
+        let labelTextSize = (labelText as NSString).boundingRect(
+            with: CGSize(width: frame.size.width, height: .greatestFiniteMagnitude),
+            options: NSStringDrawingOptions.usesLineFragmentOrigin,
+            attributes: [NSAttributedString.Key.font: font ?? UIFont.systemFont(ofSize: 17)],
+            context: nil).size
+        
+        return labelTextSize.height > bounds.size.height
+    }
+}
+
+
+protocol NewsCollectionViewCellDelegate: AnyObject {
+    func buttonTapped(at indexPath: IndexPath)
+}
+
+
+

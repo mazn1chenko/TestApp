@@ -24,6 +24,7 @@ class SpecificNews: UIViewController {
         
         setupViews()
         setupLayouts()
+        settingsBackButton()
     }
     
     
@@ -97,12 +98,34 @@ class SpecificNews: UIViewController {
             timeShampOfPostLabel.leadingAnchor.constraint(equalTo: counterOfLikesLabel.trailingAnchor, constant: 5),
             timeShampOfPostLabel.bottomAnchor.constraint(equalTo: titleOfPostLabel.topAnchor, constant: -5),
             timeShampOfPostLabel.heightAnchor.constraint(equalToConstant: 25),
-            timeShampOfPostLabel.widthAnchor.constraint(equalToConstant: 80),
+            timeShampOfPostLabel.widthAnchor.constraint(equalToConstant: 150),
 
             previewOfPostLabel.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 10),
             previewOfPostLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             previewOfPostLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
         ])
+    }
+    private func settingsBackButton() {
+        let backButton = UIButton(type: .custom)
+        backButton.setImage(UIImage(named: "backButton"), for: .normal)
+        backButton.backgroundColor = Resourses.Colors.specificNewsBackgrounColor
+        backButton.tintColor = .white
+//        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        
+//        backButton.sizeToFit()
+        backButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        
+        backButton.layer.cornerRadius = backButton.frame.height / 2
+        backButton.clipsToBounds = true
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        
+        let customBackButton = UIBarButtonItem(customView: backButton)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.leftBarButtonItem = customBackButton
+    }
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
 }
