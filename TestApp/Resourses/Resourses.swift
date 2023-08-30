@@ -12,7 +12,7 @@ enum Resourses {
     enum Colors {
 
         static let mainBackgroundColor = UIColor(hex: "#282f39")
-        
+        static let specificNewsBackgrounColor = UIColor(hex: "#393e46")
     }
     
 }

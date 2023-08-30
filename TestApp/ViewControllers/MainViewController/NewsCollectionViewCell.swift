@@ -43,7 +43,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
         titleOfPostLabel.translatesAutoresizingMaskIntoConstraints = false
         titleOfPostLabel.text = "TitleOfPost"
         titleOfPostLabel.textColor = .white
-        titleOfPostLabel.font = .boldSystemFont(ofSize: 18)
+        titleOfPostLabel.font = .boldSystemFont(ofSize: 20)
         titleOfPostLabel.numberOfLines = 3
         
         previewTextOfPostLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -116,6 +116,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
     func configureCell(model: Post) {
         titleOfPostLabel.text = model.title
         previewTextOfPostLabel.text = model.previewText
+        
         let labelSize = previewTextOfPostLabel.sizeThatFits(CGSize(width: bounds.width - 20, height: CGFloat.greatestFiniteMagnitude))
         
         if labelSize.height > previewTextOfPostLabel.font.lineHeight * 2 {

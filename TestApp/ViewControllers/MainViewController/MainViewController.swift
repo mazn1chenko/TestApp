@@ -24,6 +24,8 @@ class MainViewController: UIViewController {
     let titleLabel = UILabel()
     
     var allPostsArray: [Post]?
+    
+    let sortingButton = UIButton(type: .system)
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,11 +77,11 @@ class MainViewController: UIViewController {
     
     private func setupNavBar() {
         
-        
+        sortingButton.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
         
     }
     
-    func networking() {
+    private func networking() {
         
         ApiManager.shared.getAllPosts { allPosts in
                 self.allPostsArray = allPosts.posts
@@ -98,9 +100,21 @@ extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let vc = SpecificNews()
-        present(vc, animated: true)
+        let selectedItem = allPostsArray?[indexPath.item]
+        vc.titleOfPostLabel.text = selectedItem?.title ?? "NoInternet"
+        vc.counterOfLikesLabel.text = "\(selectedItem?.likesCount ?? 0) likes"
+
+        let timestamp = selectedItem?.timeshamp
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp ?? 0))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        let formattedDate = dateFormatter.string(from: date)
+        vc.timeShampOfPostLabel.text = "\(formattedDate)"
         
-    }
+        vc.previewOfPostLabel.text = "\(selectedItem?.previewText ?? "NoInternet")"
+        navigationController?.pushViewController(vc, animated: true)
+        
+}
 }
 
 //MARK: - UICollectionViewDataSource
@@ -126,4 +140,5 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat { 2 }
 }
+
 
