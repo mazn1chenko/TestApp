@@ -26,6 +26,8 @@ class MainViewController: UIViewController {
     
     var allSortedPostsArray: [Post]?
     
+    var cellStates: [IndexPath: Bool] = [:]
+    
     let sortingButton = UIButton(type: .system)
         
     override func viewDidLoad() {
@@ -163,11 +165,7 @@ extension MainViewController: UICollectionViewDataSource {
 
     }
     
-    static func createcompos() -> UICollectionViewCompositionalLayout {
-        
-        
-    }
-    
+
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
@@ -175,16 +173,32 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: view.frame.width, height: view.frame.height / 4.5)
-        
+        let isOpen = cellStates[indexPath] ?? false
+        if isOpen {
+            return CGSize(width: view.frame.width, height: view.frame.height / 4)
+        } else {
+            return CGSize(width: view.frame.width, height: view.frame.height / 4.5)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat { 2 }
 }
 
 extension MainViewController: NewsCollectionViewCellDelegate {
-    func buttonTapped(at indexPath: IndexPath) {
-        print(indexPath)
+    func buttonTappedCloseCell(at indexPath: IndexPath) {
+
+        cellStates[indexPath] = false
+        
+        
+        newsCollectionView.performBatchUpdates(nil, completion: nil)
+
+    }
+    
+    func buttonTappedOpenCell(at indexPath: IndexPath) {
+        
+        cellStates[indexPath] = true
+        
+        newsCollectionView.performBatchUpdates(nil, completion: nil)
     }
 }
 

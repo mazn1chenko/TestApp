@@ -131,12 +131,13 @@ class NewsCollectionViewCell: UICollectionViewCell {
             previewTextOfPostLabel.numberOfLines = 0
             expandCollapseButton.setTitle("Згорнути", for: .normal)
             isExpanded.toggle()
-            delegate?.buttonTapped(at: indexPath!)
+            delegate?.buttonTappedOpenCell(at: indexPath!)
 
         }else{
             previewTextOfPostLabel.numberOfLines = 2
             expandCollapseButton.setTitle("Розгорнути", for: .normal)
             isExpanded.toggle()
+            delegate?.buttonTappedCloseCell(at: indexPath!)
 
         }
     }
@@ -182,7 +183,8 @@ extension UILabel {
 
 
 protocol NewsCollectionViewCellDelegate: AnyObject {
-    func buttonTapped(at indexPath: IndexPath)
+    func buttonTappedOpenCell(at indexPath: IndexPath)
+    func buttonTappedCloseCell(at indexPath: IndexPath)
 }
 
 
